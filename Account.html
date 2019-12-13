@@ -1,0 +1,35 @@
+<script>
+Webflow.push(function() {
+  // Disable submitting form fields during development
+  $.urlParam = function (name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+    .exec(window.location.search);
+    return (results !== null) ? results[1] || 0 : false;
+  }
+  const email = decodeURIComponent($.urlParam('email'));
+  console.log(email);
+  var params = {
+        "url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/customers?email[is]=sinisaotmacic55@gmail.com",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Basic dGVzdF9XOWF4ZUoxNjVTckQ5THhaWnFHU3BSS2hIeG1HMjBxWDo=",
+        }
+      }
+      $.ajax(params).done(function (response) {
+        console.log(response);
+        if(response.list.length == 0)
+          console.log("No User Regisered");
+        else
+        {
+          const password = response.list[0].customer.cf_password;
+          if(password == $('#password-2').val())
+          {
+          	window.location.href = 'https://elpais.com/';
+          }
+          else
+          	console.log("Passord is Incorrect");
+        }
+      });
+});
+</script>

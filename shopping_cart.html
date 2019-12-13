@@ -1,0 +1,112 @@
+<style>
+
+</style>
+<script src="https://js.chargebee.com/v2/chargebee.js" data-cb-site="goforma-test" ></script>
+<script>
+  var packages = [
+  {name:'Accounting Software - Xero', ref:'xero-accounting-software', price:'20.00'},
+  {name:'Accounting Software - QuickBooks', ref:'quickbooks-accounting-software', price:'15.00'},
+  {name:'Accounting Software - FreeAgent', ref:'freeagent-accounting-software', price:'15.00'},
+  {name:'Company Formation - Advanced', ref:'advanced-company-formation', price:'4.95'},
+  {name:'Company Formation - Standard', ref:'standard-company-formation', price:'0.95'},
+  {name:'Company Formation - Advanced', ref:'advanced-company-formation', price:'4.95'},
+  {name:'Virtual Office - Standard (Mail Collection)', ref:'standard-virtual-office', price:'15.00'},
+  {name:'Virtual Office - Advanced (Digital Mail)', ref:'advanced-virtual-office', price:'25.00'},
+  {name:'Virtual Office - Premium (Mail Forward)', ref:'premium-virtual-office', price:'35.00'},
+  {name:'Live Receptionist', ref:'live-receptionist', price:'19.00'},
+  ];
+  var ids = [
+  'software1',
+  'software2',
+  'software3',
+  'formation1',
+  'formation2',
+  'formation3',
+  'office1',
+  'office2',
+  'office3',
+  'receptionist'
+  ];
+  for(var i = 0; i < packages.length; i ++)
+  {
+    packages[i].state = false;
+  }
+  
+  $(document).ready(function(){
+    $('.button15').click(function(){
+      if($(this).hasClass('btn_remove'))
+      {
+        $(this).removeClass('btn_remove');
+        $(this).text('Add');
+      }
+      else
+      {
+        $(this).addClass('btn_remove');
+        $(this).text('Remove');
+      }
+      var id = $(this).attr("id");
+      console.log("Clicked:",id);
+      for(var j = 0 ; j < ids.length; j ++)
+      {
+      	if(id == ids[j])
+        {
+          packages[j].state = !packages[j].state;
+          break;
+         }
+       }
+       console.log("Get Clicked:",packages[j].name, packages[j].state);
+       if(packages[j].state) //package added
+       {
+			  $("#cart-container").append("<div class='div-block-50' id='order-" + ids[j] + "'><div class='text-block-31'>" + packages[j].name + "</div><h2 class='heading-23 pink orderpink'>£</h2><h3 class='heading-23 pink orderprice'>" + packages[j].price + "</h3></div>");
+        var value = parseFloat($('#order-totalprice').text()) + parseFloat(packages[j].price);
+        $('#order-totalprice').text(value.toFixed(2));
+        
+       }
+       else //package removed
+       {
+       	$('#order-' + ids[j]).remove();
+        var value = parseFloat($('#order-totalprice').text()) - parseFloat(packages[j].price);
+        $('#order-totalprice').text(value.toFixed(2));
+       }
+    });
+
+  });
+
+	document.addEventListener("DOMContentLoaded", function() {
+      var cbInstance = Chargebee.getInstance();
+      var planElement = document.querySelector("[data-cb-plan-id='{{wf {&quot;path&quot;:&quot;charegebee-ref&quot;,&quot;type&quot;:&quot;PlainText&quot;\} }}']");
+      var cart = cbInstance.getCart();
+    	var product = cbInstance.getProduct(planElement);
+      cbInstance.setCheckoutCallbacks(function(cart) {
+      	
+        for(var j = 0 ; j < packages.length; j++)
+        {
+          if(packages[j].state)
+            product.addons.push({id: packages[j].ref});
+        }
+        console.log("Addons:",product.addons);
+        return {
+            loaded: function() {
+                console.log("checkout opened");
+            },
+            close: function() {
+                console.log("checkout closed");
+                product.addons = [];
+            },
+            success: function(hostedPageId) {
+              console.log(hostedPageId);
+            },
+            step: function(value) {
+                console.log(value);
+            }
+        }
+      });
+    });
+    
+document.getElementById("memberid").value =
+  Math.random().toString(36).substring(2);
+  
+ document.getElementById("member-page").value = document.getElementById("memberid").value;
+ 
+ </script>
+ 

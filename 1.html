@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script>
+            var params = {
+                "url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/customers?email[is]=sinisaotmacic55@gmail.com",
+                "method": "GET",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Basic dGVzdF9XOWF4ZUoxNjVTckQ5THhaWnFHU3BSS2hIeG1HMjBxWDo=",
+                }
+            }
+
+            $.ajax(params).done(function (response) {
+                console.log(response);
+                if(response.list.length == 0)
+                    console.log("No User Regisered");
+                else
+                {
+                    const password = response.list[0].customer.cf_password;
+                    console.log(password);
+                }
+            });
+        </script>
+    </head>
+
+    <body>
+
+    </body>
+</html>

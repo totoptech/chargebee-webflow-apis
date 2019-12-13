@@ -1,0 +1,32 @@
+<script>
+Webflow.push(function() {
+  // Disable submitting form fields during development
+  $('#wf-form-login').submit(function() {
+  	const email = $('#email-2').val();
+  	var params = {
+        "url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/customers?email[is]="+email,
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Basic YOUR-TOKEN",
+        }
+      }
+      $.ajax(params).done(function (response) {
+        console.log(response);
+        if(response.list.length == 0)
+          console.log("No User Regisered");
+        else
+        {
+          const password = response.list[0].customer.cf_password;
+          
+          if(password == $('#password-2').val())
+          	window.location.href = 'https://goformaco.webflow.io/account?email='+encodeURIComponent(email);
+          else
+          	console.log("Passord is Incorrect");
+        }
+      });
+    console.log("Login Button Clicked!");
+    return false;
+  });
+});
+</script>
