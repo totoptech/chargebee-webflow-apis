@@ -66,10 +66,11 @@ Webflow.push(function() {
 					var subscription = res_subscription[i].subscription.plan_id;
 					var package = packages.filter(function(pack){return pack.name == subscription});
 					for(var j = 0 ; j < pacakge.state.length; j ++)
-						if(packages.state[j])
+						if(package.state[j])
 							state_show[j] = true;
 				}
-				
+				console.log(state_show);
+
 			})
 		}
 	});
