@@ -1,18 +1,31 @@
 <script>
 var packages = [
-	{name : 'standard-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'advanced-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'premium-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'standard-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'advanced-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'premium-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
-	{name : 'standard-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
-	{name : 'advanced-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
-	{name : 'premium-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
-	{name : 'company-formation', field1: false, field2: false, field3: true, field4: false, field5: false, field6: false},
-	{name : 'company-formation', field1: false, field2: false, field3: true, field4: false, field5: false, field6: false},
-	{name : 'professional-receptionist', field1: false, field2: false, field3: false, field4: false, field5: true, field6: false},
+	{name : 'standard-limited-company-accounting', state: [true, false, false, true, false, false]},
+	{name : 'advanced-limited-company-accounting', state: [true, false, false, true, false, false]},
+	{name : 'premium-limited-company-accounting', state: [true, false, false, true, false, false]},
+
+	{name : 'standard-sole-trader-accounting', state: [false, true, false, true, false, false]},
+	{name : 'advanced-sole-trader-accounting', state: [false, true, false, true, false, false]},
+	{name : 'premium-sole-trader-accounting', state: [false, true, false, true, false, false]},
+
+	{name : 'standard-virtual-office', state: [false, false, true, false, false, true]},
+	{name : 'advanced-virtual-office', state: [false, false, true, false, false, true]},
+	{name : 'premium-virtual-office', state: [false, false, true, false, false, true]},
+
+	{name : 'standard-company-formation', state: [false, false, true, false, false, false]},
+	{name : 'advanced-company-formation', state: [false, false, true, false, false, false]},
+	{name : 'live-receptionist', state: [false, false, false, false, true, false]},
 ]
+var  fileds = [
+	'd_company1',
+	'd_company2',
+	'd_company3',
+	'd_accounting',
+	'd_receptionist',
+	'd_office'
+]
+var state_show = [ false, false, false, false, false, false]
+
 Webflow.push(function() {
 	// Disable submitting form fields during development
 	$.urlParam = function (name) {
@@ -51,7 +64,12 @@ Webflow.push(function() {
 				for(var i = 0; i < res_subscription.length; i ++)
 				{
 					var subscription = res_subscription[i].subscription.plan_id;
+					var package = packages.filter(function(pack){return pack.name == subscription});
+					for(var j = 0 ; j < pacakge.state.length; j ++)
+						if(packages.state[j])
+							state_show[j] = true;
 				}
+				
 			})
 		}
 	});
