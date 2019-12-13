@@ -1,35 +1,59 @@
 <script>
+var packages = [
+	{name : 'standard-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'advanced-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'premium-limited-company-accounting', field1: true, field2: false, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'standard-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'advanced-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'premium-sole-trader-accounting', field1: false, field2: true, field3: false, field4: ture, field5: false, field6: false},
+	{name : 'standard-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
+	{name : 'advanced-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
+	{name : 'premium-virtual-office', field1: false, field2: false, field3: true, field4: false, field5: false, field6: true},
+	{name : 'company-formation', field1: false, field2: false, field3: true, field4: false, field5: false, field6: false},
+	{name : 'company-formation', field1: false, field2: false, field3: true, field4: false, field5: false, field6: false},
+	{name : 'professional-receptionist', field1: false, field2: false, field3: false, field4: false, field5: true, field6: false},
+]
 Webflow.push(function() {
-  // Disable submitting form fields during development
-  $.urlParam = function (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)')
-    .exec(window.location.search);
-    return (results !== null) ? results[1] || 0 : false;
-  }
-  const email = decodeURIComponent($.urlParam('email'));
-  console.log(email);
-  var params = {
-        "url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/customers?email[is]=sinisaotmacic55@gmail.com",
-        "method": "GET",
-        "headers": {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "Basic dGVzdF9XOWF4ZUoxNjVTckQ5THhaWnFHU3BSS2hIeG1HMjBxWDo=",
-        }
-      }
-      $.ajax(params).done(function (response) {
-        console.log(response);
-        if(response.list.length == 0)
-          console.log("No User Regisered");
-        else
-        {
-          const password = response.list[0].customer.cf_password;
-          if(password == $('#password-2').val())
-          {
-          	window.location.href = 'https://elpais.com/';
-          }
-          else
-          	console.log("Passord is Incorrect");
-        }
-      });
+	// Disable submitting form fields during development
+	$.urlParam = function (name) {
+		var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+		.exec(window.location.search);
+		return (results !== null) ? results[1] || 0 : false;
+	}
+	const email = decodeURIComponent($.urlParam('email'));
+	console.log(email);
+	var customer_params = {
+		"url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/customers?email[is]="+ email,
+		"method": "GET",
+		"headers": {
+		"Content-Type": "application/x-www-form-urlencoded",
+		"Authorization": "Basic dGVzdF9XOWF4ZUoxNjVTckQ5THhaWnFHU3BSS2hIeG1HMjBxWDo=",
+		}
+	}
+	$.ajax(customer_params).done(function (res_customer) {
+		console.log(res_customer);
+		if(res_customer.list.length == 0)
+			console.log("No User Regisered");
+		else
+		{
+			console.log("Customer_ID", res_customer.list[0].customer.id);
+			const customer_id= res_customer.list[0].customer.id;
+			var subscription_params = {
+				"url": "https://cors-anywhere.herokuapp.com/https://goforma-test.chargebee.com/api/v2/subscriptions?customer_id[is]="+ customer_id,
+				"method": "GET",
+				"headers": {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Authorization": "Basic dGVzdF9XOWF4ZUoxNjVTckQ5THhaWnFHU3BSS2hIeG1HMjBxWDo=",
+				}
+			}
+			$.ajax(subscription_params).done(function (res_subscription) {
+				console.log(res_subscription);
+				for(var i = 0; i < res_subscription.length; i ++)
+				{
+					var subscription = res_subscription[i].subscription.plan_id;
+				}
+			})
+		}
+	});
 });
 </script>
